@@ -28,7 +28,7 @@ services:
       - notification-service-postgres
     environment:
       - DB_HOST=postgres
-      - DB_NAME=remotejob
+      - DB_NAME=notification-service
       - DB_USER=postgres
       - DB_PASS=postgres
       - DB_PORT=5432
