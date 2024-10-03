@@ -1,18 +1,22 @@
 # Coding Task: Create a Stellar Notification System for Decaf Wallet
 
-Objective: Develop a microservice-based notification system that monitors Stellar transactions and notifies Decaf users of relevant activities.
+Objective: Develop a microservice-based notification system that monitors Stellar transactions and notifies Decaf users
+of relevant activities.
 
 ## Context:
 
-Right now in the Decaf wallet, when you receive a Solana transaction you will be notified. But on stellar we are yet to have this, due to the unavailability of third party indexing and webhook services. We need your help!
+Right now in the Decaf wallet, when you receive a Solana transaction you will be notified. But on stellar we are yet to
+have this, due to the unavailability of third party indexing and webhook services. We need your help!
 
-Create a system to notify our users on Stellar. If you have any suggestions outside of the guidelines they are more than welcome. Your code will actually be implemented if we love it!
+Create a system to notify our users on Stellar. If you have any suggestions outside of the guidelines they are more than
+welcome. Your code will actually be implemented if we love it!
 
 ![img.png](img.png)
 
 ## Requirements:
 
-- Parse the Stellar transactions stream → https://developers.stellar.org/docs/data/horizon/api-reference/list-all-transactions
+- Parse the Stellar transactions
+  stream → https://developers.stellar.org/docs/data/horizon/api-reference/list-all-transactions
 - Identify Decaf users utilizing the Decaf Users API
 - Notify the notification service when a Decaf user is found
 - Implement the solution in a Microservice architecture
@@ -21,7 +25,8 @@ Create a system to notify our users on Stellar. If you have any suggestions outs
 
 ## Technical Specifications:
 
-1. Create a microservice to handle [Stellar transaction stream parsing](https://developers.stellar.org/docs/data/horizon/api-reference/list-all-transactions)
+1. Create a microservice to
+   handle [Stellar transaction stream parsing](https://developers.stellar.org/docs/data/horizon/api-reference/list-all-transactions)
 2. Implement a service to interact with the Decaf Users API
     1. Example response from the users search api:
        url: https://staging.decafapi.com/searchUserProfile?text=GCTBOGVD4POOHNRCPZANGKWP2HKCIRVA6ISWTKXURJP4N5QCLZRYSAAM
@@ -132,7 +137,7 @@ Create a system to notify our users on Stellar. If you have any suggestions outs
         }
       }'
     ```
-    
+
 4. Ensure proper error handling and logging throughout the system
 5. (Bonus) Implement tests for each component
 
@@ -152,3 +157,7 @@ Create a system to notify our users on Stellar. If you have any suggestions outs
 - Quality of documentation and comments
 - Test coverage and quality
 - Creativity on design and scalability/iterability on future ideas
+
+Planned Architecture:
+
+![Notification API - Microservice App Diagram .png](Notification%20API%20-%20Microservice%20App%20Diagram%20.png)
