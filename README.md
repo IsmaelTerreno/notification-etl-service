@@ -1,73 +1,154 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Coding Task: Create a Stellar Notification System for Decaf Wallet
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Objective: Develop a microservice-based notification system that monitors Stellar transactions and notifies Decaf users of relevant activities.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Context:
 
-## Description
+Right now in the Decaf wallet, when you receive a Solana transaction you will be notified. But on stellar we are yet to have this, due to the unavailability of third party indexing and webhook services. We need your help!
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Create a system to notify our users on Stellar. If you have any suggestions outside of the guidelines they are more than welcome. Your code will actually be implemented if we love it!
 
-## Installation
+![img.png](img.png)
 
-```bash
-$ npm install
-```
+## Requirements:
 
-## Running the app
+- Parse the Stellar transactions stream → https://developers.stellar.org/docs/data/horizon/api-reference/list-all-transactions
+- Identify Decaf users utilizing the Decaf Users API
+- Notify the notification service when a Decaf user is found
+- Implement the solution in a Microservice architecture
+- Use TypeScript for implementation (if not using TypeScript, provide detailed comments and documentation)
+- Note: All internal Decaf services endpoints should be mocked! i.e. Users Api and Notification endpoint
 
-```bash
-# development
-$ npm run start
+## Technical Specifications:
 
-# watch mode
-$ npm run start:dev
+1. Create a microservice to handle [Stellar transaction stream parsing](https://developers.stellar.org/docs/data/horizon/api-reference/list-all-transactions)
+2. Implement a service to interact with the Decaf Users API
+    1. Example response from the users search api:
+       url: https://staging.decafapi.com/searchUserProfile?text=GCTBOGVD4POOHNRCPZANGKWP2HKCIRVA6ISWTKXURJP4N5QCLZRYSAAM
 
-# production mode
-$ npm run start:prod
-```
+        ```json
+        [
+          {
+            "id": "pIUlq7w5kicbSn1S70Vo7R7LzA13",
+            "username": "scottymrty",
+            "name": "scottymrty",
+            "email": "scott@decaf.so",
+            "photoUrl": "",
+            "accountInfos": [
+              {
+                "publicKey": "CBM7T1NBJUH7BQiADpvnNVXqdnT8FmK7quJUJaUTEEG8",
+                "chain": "solana",
+                "index": 0,
+                "isActivated": true,
+                "isPrivate": false
+              },
+              {
+                "publicKey": "GCTBOGVD4POOHNRCPZANGKWP2HKCIRVA6ISWTKXURJP4N5QCLZRYSAAM",
+                "chain": "stellar",
+                "index": 0,
+                "isActivated": true,
+                "isPrivate": false
+              },
+              {
+                "publicKey": "8Km5LnE4kAWTdYjTfv4t5jV3rFVuxYmAbkiezrjqs1vp",
+                "chain": "solana",
+                "index": 1,
+                "isActivated": true,
+                "isPrivate": false
+              },
+              {
+                "publicKey": "GBWNAGKADFY6H572CAJLWPRDH5DRNPSNMCVQEWYAAYVMH2K7TZVQCSFU",
+                "chain": "stellar",
+                "index": 1,
+                "isActivated": true,
+                "isPrivate": false
+              }
+            ],
+            "settings": {
+              "visibility": {
+                "email": true,
+                "name": true,
+                "profilePhoto": true
+              }
+            }
+          }
+        ]
+        ```
 
-## Test
+3. Develop a notification service to process and send notifications to our “notifications service”
+    1. Structure of notification service request
 
-```bash
-# unit tests
-$ npm run test
+    ```json
+    # Send Notifications API
+    
+    ## Endpoint
+    POST /notifications/send
+    
+    ## Headers
+    - `Content-Type: application/json`
+    - `Authorization: <NOTIFICATIONS_API_KEY>`
+    
+    ## Request Body
+    ```json
+    {
+      "userIds": ["user1", "user2", "user3"],
+      "notification": {
+        "title": "New Message",
+        "body": "You have a new message!",
+        "data": {
+          "messageId": "12345",
+          "sender": "John Doe"
+        }
+      }
+    }
+    ```
 
-# e2e tests
-$ npm run test:e2e
+   ### Fields
+    - `userIds` (required): An array of user IDs to send the notification to.
+    - `notification` (required):
+        - `title` (required): The title of the notification.
+        - `body` (optional): The body text of the notification.
+        - `data` (optional): Any additional JSON data to be sent with the notification.
 
-# test coverage
-$ npm run test:cov
-```
+   ## Notes
+    - The `NOTIFICATIONS_API_KEY` must be included in the Authorization header for the request to be authenticated.
+    - The `fcmToken` and `userId` are not included in the request body as they are handled internally by the server.
+    - The server will retrieve the necessary FCM tokens for each user ID provided.
 
-## Support
+   ## Example cURL Request
+    ```bash
+    curl -X POST https://staging.decafapi.com/notifications/send \
+      -H "Content-Type: application/json" \
+      -H "Authorization: your-notifications-api-key" \
+      -d '{
+        "userIds": ["user1", "user2"],
+        "notification": {
+          "title": "New Feature",
+          "body": "Check out our latest update!",
+          "data": {
+            "featureId": "789",
+            "version": "2.0"
+          }
+        }
+      }'
+    ```
+    
+4. Ensure proper error handling and logging throughout the system
+5. (Bonus) Implement tests for each component
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Deliverables:
 
-## Stay in touch
+- Source code for all microservices
+- Documentation explaining the architecture and how to run the system
+- If not using TypeScript, provide comprehensive comments and additional documentation
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Evaluation Criteria:
 
-## License
-
-Nest is [MIT licensed](LICENSE).
+- Code quality and organization
+- Proper implementation of microservice architecture
+- Efficiency of the Stellar transaction parsing
+- Accuracy in identifying Decaf users
+- Reliability of the notification system
+- Quality of documentation and comments
+- Test coverage and quality
+- Creativity on design and scalability/iterability on future ideas
