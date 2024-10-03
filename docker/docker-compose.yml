@@ -1,0 +1,53 @@
+version: '3.7'
+services:
+  notification-service-api:
+    image: notification-service-api:latest
+    env_file:
+      - docker.env
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+      args:
+        SERVER_PORT_LISTENING: ${SERVER_PORT_LISTENING}
+        NODE_ENV: ${NODE_ENV}
+        CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN}
+        HOST_DB_CONFIG: ${HOST_DB_CONFIG}
+        PORT_DB_CONFIG: ${PORT_DB_CONFIG}
+        DIALECT_DB_CONFIG: ${DIALECT_DB_CONFIG}
+        PROTOCOL_DB_CONFIG: ${PROTOCOL_DB_CONFIG}
+        DATABASE_NAME_DB_CONFIG: ${DATABASE_NAME_DB_CONFIG}
+        LOG_DEBUG_DB_CONFIG: ${LOG_DEBUG_DB_CONFIG}
+        USER_NAME_DB_CONFIG: ${USER_NAME_DB_CONFIG}
+        USER_PASSWORD_DB_CONFIG: ${USER_PASSWORD_DB_CONFIG}
+    restart: always
+    ports:
+      - '3090:3090'
+    volumes:
+      - ./notification-service-api-data:/notification-service-api
+    depends_on:
+      - notification-service-postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=remotejob
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_PORT=5432
+    networks:
+      - notification-api-network
+
+  notification-service-postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=notification-service
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./notification-service-api-postgres-data:/var/lib/postgresql/data
+    networks:
+      - notification-api-network
+
+networks:
+  notification-api-network:
