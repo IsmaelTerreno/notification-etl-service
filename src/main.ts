@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Transport } from '@nestjs/microservices';
 
 /**
  * Gets the cors origin to respect the expressjs cors which is behind scenes in NestJs
@@ -33,6 +34,19 @@ async function bootstrap() {
     }),
   );
   app.enableCors();
+  const microservice = app.connectMicroservice({
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RABBITMQ_CONNECTION_URL],
+      queue: 'notification-service',
+      prefetchCount: 20,
+      isGlobalPrefetchCount: true,
+      queueOptions: {
+        durable: true,
+      },
+    },
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Notification service API')
     .setDescription(
@@ -42,6 +56,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, document);
+  await app.startAllMicroservices();
   await app.listen(SERVER_PORT_LISTENING);
 }
 

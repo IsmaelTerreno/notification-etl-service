@@ -34,8 +34,20 @@ services:
       - DB_PORT=5432
     networks:
       - notification-api-network
-
+  rabbitmq:
+    # Service to run RabbitMQ and handle the message queue for notification service
+    image: rabbitmq:management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=notification_service_api_mq
+      - RABBITMQ_DEFAULT_PASS=notification_service_api_mq
+    ports:
+      - "5672:5672" #amqp
+      - "15672:15672" #http
+    networks:
+      - notification-api-network
   notification-service-postgres:
+
     image: postgres:latest
     restart: always
     environment:
