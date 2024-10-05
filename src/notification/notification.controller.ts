@@ -18,7 +18,7 @@ export class NotificationController {
       return this.appService.getTransactions();
     } catch (error) {
       this.logger.error(
-        `Failed to get transactions - Details: ${error.message}`,
+        `❌ Failed to get transactions - Details: ${error.message}`,
       );
       return error.message;
     }

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { StellarBlockchainService } from '../stellar-blockchain/stellar-blockchain.service';
+import { RabbitMQService } from '../rabbit-mq/rabbitmq.service';
 
 @Injectable()
 export class NotificationService {
@@ -7,6 +8,7 @@ export class NotificationService {
 
   constructor(
     private readonly stellarBlockchainService: StellarBlockchainService,
+    private readonly rabbitMQService: RabbitMQService,
   ) {}
 
   getHello(): string {
@@ -52,11 +54,12 @@ export class NotificationService {
             transactionDetails,
           );
           this.logger.log('🏁 End of transaction info stream');
+          // Send the transaction details to the RabbitMQ queue
         });
       });
     } catch (error) {
       this.logger.error(
-        `Failed to get transactions - Details: ${error.message}`,
+        `❌ Failed to get transactions - Details: ${error.message}`,
       );
       return error.message;
     }
