@@ -160,4 +160,5 @@ welcome. Your code will actually be implemented if we love it!
 
 Planned Architecture:
 
-![Notification API - Microservice App Diagram .png](Notification%20API%20-%20Microservice%20App%20Diagram%20.png)
+Navigate through the [following link to access the planned architecture](https://s.icepanel.io/uYg8sIP5nHttWN/9CSh) for
+the Stellar Notification microservice system. 

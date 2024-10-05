@@ -1,15 +1,15 @@
 version: '3.7'
 services:
-  notification-service-api:
-    # Service to run the notification service API for ETL process with decaf and stellar blockchain
-    image: notification-service-api:latest
+  notification-etl-service:
+    # Service to run the notification service for ETL process with decaf and stellar blockchain
+    image: notification-etl-service:latest
     env_file:
       - docker.env
     build:
       context: ../
       dockerfile: ./docker/Dockerfile
       args:
-        # Environment variables for the notification service API
+        # Environment variables for the notification ETL service
         SERVER_PORT_LISTENING: ${SERVER_PORT_LISTENING}
         NODE_ENV: ${NODE_ENV}
         CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN}
@@ -25,15 +25,18 @@ services:
     ports:
       - '3090:3090' # Port to access the notification service API
     volumes:
-      - ./notification-service-api-data:/notification-service-api
+      - ./notification-etl-service-data:/notification-etl-service
     depends_on:
-      - notification-service-postgres
+      # Declare dependencies for startup
+      - postgres
+      - rabbitmq
     networks:
       - notification-api-network
   rabbitmq:
     # Service to run RabbitMQ and handle the message queue for notification service
     image: rabbitmq:management
     container_name: rabbitmq
+    hostname: rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=notification_service_api_mq
       - RABBITMQ_DEFAULT_PASS=notification_service_api_mq
@@ -43,8 +46,33 @@ services:
       - "15692:15692" #Prometheus Exporter
     networks:
       - notification-api-network
-  notification-service-postgres:
-
+  prometheus:
+    # Service to run Prometheus for monitoring the notification service
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"  # Prometheus UI
+    networks:
+      - notification-api-network
+  grafana:
+    # Service to run Grafana for monitoring the notification service
+    image: grafana/grafana-enterprise
+    # if you are running as root then set it to 0
+    # else find the right id with the id -u command
+    user: '0'
+    environment:
+      - GF_SERVER_ROOT_URL=http://my.grafana.server/
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+    restart: unless-stopped
+    volumes:
+      - ./grafana-storage:/var/lib/grafana
+    ports:
+      - "3000:3000"  # Grafana UI
+    networks:
+      - notification-api-network
+  postgres:
+    # Service to run the PostgresSQL database for the notification service
     image: postgres:latest
     restart: always
     environment:
@@ -54,9 +82,22 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - ./notification-service-api-postgres-data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
     networks:
       - notification-api-network
-
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    ports:
+      - "9187:9187"
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:postgres@postgres:5432/notification-service?sslmode=disable"
+    links:
+      - postgres
+      - prometheus
+    depends_on:
+      # Declare dependencies for startup
+      - postgres
+    networks:
+      - notification-api-network
 networks:
   notification-api-network:
