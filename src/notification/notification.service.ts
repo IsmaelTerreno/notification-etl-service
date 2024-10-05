@@ -48,6 +48,7 @@ export class NotificationService {
                 .map((line) => JSON.parse(line))
             );
           };
+          // Parse the transaction details to JSON to get the transaction info
           const transactionDetails = parseStellarTransaction(transactionInfo);
           this.logger.log(
             '📦 Last transaction details info:',
