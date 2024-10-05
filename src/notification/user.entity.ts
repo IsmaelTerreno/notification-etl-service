@@ -8,6 +8,13 @@ export class User {
 
   @Column()
   userId: string;
+
   @ManyToOne(() => Subscription, (userSubscription) => userSubscription.users)
   subscription: Subscription;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }
