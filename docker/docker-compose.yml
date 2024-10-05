@@ -1,6 +1,7 @@
 version: '3.7'
 services:
   notification-service-api:
+    # Service to run the notification service API for ETL process with decaf and stellar blockchain
     image: notification-service-api:latest
     env_file:
       - docker.env
@@ -8,6 +9,7 @@ services:
       context: ../
       dockerfile: ./docker/Dockerfile
       args:
+        # Environment variables for the notification service API
         SERVER_PORT_LISTENING: ${SERVER_PORT_LISTENING}
         NODE_ENV: ${NODE_ENV}
         CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN}
@@ -21,17 +23,11 @@ services:
         USER_PASSWORD_DB_CONFIG: ${USER_PASSWORD_DB_CONFIG}
     restart: always
     ports:
-      - '3090:3090'
+      - '3090:3090' # Port to access the notification service API
     volumes:
       - ./notification-service-api-data:/notification-service-api
     depends_on:
       - notification-service-postgres
-    environment:
-      - DB_HOST=postgres
-      - DB_NAME=notification-service
-      - DB_USER=postgres
-      - DB_PASS=postgres
-      - DB_PORT=5432
     networks:
       - notification-api-network
   rabbitmq:
@@ -42,8 +38,9 @@ services:
       - RABBITMQ_DEFAULT_USER=notification_service_api_mq
       - RABBITMQ_DEFAULT_PASS=notification_service_api_mq
     ports:
-      - "5672:5672" #amqp
-      - "15672:15672" #http
+      - "5672:5672" # RabbitMQ for AMQP protocol
+      - "15672:15672" #RabbitMQ Management UI
+      - "15692:15692" #Prometheus Exporter
     networks:
       - notification-api-network
   notification-service-postgres:
