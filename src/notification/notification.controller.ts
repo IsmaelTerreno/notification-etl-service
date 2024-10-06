@@ -5,11 +5,7 @@ import { NotificationService } from './notification.service';
 export class NotificationController {
   private readonly logger = new Logger(NotificationController.name);
 
-  constructor(private readonly appService: NotificationService) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  constructor(private readonly appService: NotificationService) {
   }
 
   @Get('transactions')
