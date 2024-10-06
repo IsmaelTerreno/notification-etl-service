@@ -11,7 +11,7 @@ export class NotificationController {
   @Get('transactions')
   getTransactions() {
     try {
-      return this.appService.getTransactions();
+      return this.appService.getTransactionsForPaymentsUpdates();
     } catch (error) {
       this.logger.error(
         `❌ Failed to get transactions - Details: ${error.message}`,
