@@ -14,8 +14,8 @@ export class HealthController {
   check() {
     return this.health.check([
       () => this.http.pingCheck('transactions-blockchain-stellar', process.env.STELLAR_BASE_SERVER_URL + process.env.STELLAR_TRANSACTION_ENDPOINT),
-      () => this.http.pingCheck('search-user-profile-decaf', 'https://68b4d0f0-d56c-476b-9b2b-367806e0abad.mock.pstmn.io/searchUserProfile'),
-      () => this.http.pingCheck('notification-send-decaf', 'https://68b4d0f0-d56c-476b-9b2b-367806e0abad.mock.pstmn.io/notifications/send', { method: 'POST' }),
+      () => this.http.pingCheck('search-user-profile-decaf', process.env.DECAF_BASE_SERVER_URL + process.env.DECAF_SEARCH_USER_ENDPOINT),
+      () => this.http.pingCheck('notification-send-decaf', process.env.DECAF_BASE_SERVER_URL + process.env.DECAF_SEND_NOTIFICATION_ENDPOINT, { method: 'POST' }),
     ]);
   }
 }
