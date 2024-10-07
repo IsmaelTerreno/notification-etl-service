@@ -12,4 +12,8 @@ import { HttpModule } from '@nestjs/axios';
   providers: [StellarBlockchainService],
   exports: [StellarBlockchainService],
 })
+/**
+ * The module that contains all the stellar blockchain related services.
+ * This module is responsible for sending requests to the stellar blockchain server.
+ */
 export class StellarBlockchainModule {}

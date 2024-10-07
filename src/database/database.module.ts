@@ -5,4 +5,8 @@ import { databaseProviders } from './database.providers';
   providers: [...databaseProviders],
   exports: [...databaseProviders],
 })
+/**
+ * Database module to export the database providers and make them available to the application
+ * in this way we can use the database connection in the entire application
+ */
 export class DatabaseModule {}

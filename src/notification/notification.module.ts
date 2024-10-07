@@ -26,4 +26,8 @@ import { AccountRepository } from './account.repository';
     SubscriptionRepository,
   ],
 })
+/**
+ * The module that contains all the notification related services and controllers as the heart for other modules.
+ * This module is responsible for persisting the notifications and subscriptions in the database and sending notifications to the users via rabbitMQ for message delegation.
+ */
 export class NotificationModule {}

@@ -8,5 +8,8 @@ import { HealthModule } from '../health/health.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {
-}
+/**
+ * The main module that contains all the other modules.
+ * This module is responsible for importing all the other modules and starting the application.
+ */
+export class AppModule {}

@@ -7,5 +7,7 @@ import { HealthController } from './health.controller';
   imports: [TerminusModule, HttpModule],
   controllers: [HealthController],
 })
-export class HealthModule {
-}
+/**
+ * The HealthModule is a feature module that encapsulates the health check feature for dependency health checks.
+ */
+export class HealthModule {}
