@@ -289,7 +289,7 @@
           },
           "editorMode": "builder",
           "format": "table",
-          "rawSql": "SELECT COUNT(id) FROM \"account \" LIMIT 50 ",
+          "rawSql": "SELECT COUNT(id) FROM account LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -314,7 +314,7 @@
             ],
             "limit": 50
           },
-          "table": "\"account \""
+          "table": "account"
         }
       ],
       "title": "Total accounts imported",
@@ -381,7 +381,8 @@
           },
           "editorMode": "builder",
           "format": "table",
-          "rawSql": "SELECT COUNT(\"userId\") FROM \"user \" LIMIT 50 ",
+          "hide": false,
+          "rawSql": "SELECT COUNT(id) FROM \"user\" LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -389,7 +390,7 @@
                 "name": "COUNT",
                 "parameters": [
                   {
-                    "name": "\"userId\"",
+                    "name": "id",
                     "type": "functionParameter"
                   }
                 ],
@@ -406,41 +407,7 @@
             ],
             "limit": 50
           },
-          "table": "\"user \""
-        },
-        {
-          "datasource": {
-            "type": "grafana-postgresql-datasource",
-            "uid": "fdzz2yjzea1hcc"
-          },
-          "editorMode": "builder",
-          "format": "table",
-          "hide": false,
-          "rawSql": "SELECT \"createdAt\" FROM \"user \" LIMIT 50 ",
-          "refId": "B",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [
-                  {
-                    "name": "\"createdAt\"",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 50
-          },
-          "table": "\"user \""
+          "table": "\"user\""
         }
       ],
       "title": "Imported users",
@@ -507,7 +474,7 @@
           },
           "editorMode": "builder",
           "format": "table",
-          "rawSql": "SELECT COUNT(name) FROM \"subscription \" LIMIT 50 ",
+          "rawSql": "SELECT COUNT(id) FROM subscription LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -515,7 +482,7 @@
                 "name": "COUNT",
                 "parameters": [
                   {
-                    "name": "name",
+                    "name": "id",
                     "type": "functionParameter"
                   }
                 ],
@@ -532,7 +499,7 @@
             ],
             "limit": 50
           },
-          "table": "\"subscription \""
+          "table": "subscription"
         }
       ],
       "title": "Total subscriptions",
@@ -575,7 +542,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 12,
         "x": 0,
         "y": 10
@@ -602,7 +569,7 @@
           },
           "editorMode": "builder",
           "format": "table",
-          "rawSql": "SELECT \"userId\", username, email, \"createdAt\", \"subscriptionId\" FROM \"user \" LIMIT 50 ",
+          "rawSql": "SELECT \"userId\", username, email, \"subscriptionId\", \"createdAt\" FROM \"user\" LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -636,7 +603,7 @@
               {
                 "parameters": [
                   {
-                    "name": "\"createdAt\"",
+                    "name": "\"subscriptionId\"",
                     "type": "functionParameter"
                   }
                 ],
@@ -645,7 +612,7 @@
               {
                 "parameters": [
                   {
-                    "name": "\"subscriptionId\"",
+                    "name": "\"createdAt\"",
                     "type": "functionParameter"
                   }
                 ],
@@ -662,7 +629,7 @@
             ],
             "limit": 50
           },
-          "table": "\"user \""
+          "table": "\"user\""
         }
       ],
       "title": "Imported user details",
@@ -704,7 +671,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 4,
         "w": 12,
         "x": 12,
         "y": 10
@@ -731,7 +698,7 @@
           },
           "editorMode": "builder",
           "format": "table",
-          "rawSql": "SELECT name, \"createdAt\", \"updatedAt\", id FROM \"subscription \" LIMIT 50 ",
+          "rawSql": "SELECT name, id, \"createdAt\" FROM subscription LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -747,25 +714,16 @@
               {
                 "parameters": [
                   {
-                    "name": "\"createdAt\"",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              },
-              {
-                "parameters": [
-                  {
-                    "name": "\"updatedAt\"",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              },
-              {
-                "parameters": [
-                  {
                     "name": "id",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "\"createdAt\"",
                     "type": "functionParameter"
                   }
                 ],
@@ -782,7 +740,7 @@
             ],
             "limit": 50
           },
-          "table": "\"subscription \""
+          "table": "subscription"
         }
       ],
       "title": "Subscription details",
@@ -824,16 +782,17 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 10,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 14
       },
       "id": 10,
       "options": {
-        "cellHeight": "sm",
+        "cellHeight": "md",
         "footer": {
           "countRows": false,
+          "enablePagination": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -851,7 +810,7 @@
           },
           "editorMode": "builder",
           "format": "table",
-          "rawSql": "SELECT \"publicKey\", \"userId\", \"isActivated\", \"isPrivate\" FROM \"account \" LIMIT 50 ",
+          "rawSql": "SELECT \"publicKey\", chain, \"userId\", \"isActivated\", \"isPrivate\", \"createdAt\" FROM account LIMIT 50 ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -859,6 +818,15 @@
                 "parameters": [
                   {
                     "name": "\"publicKey\"",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "chain",
                     "type": "functionParameter"
                   }
                 ],
@@ -890,6 +858,15 @@
                   }
                 ],
                 "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "\"createdAt\"",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
               }
             ],
             "groupBy": [
@@ -902,7 +879,7 @@
             ],
             "limit": 50
           },
-          "table": "\"account \""
+          "table": "account"
         }
       ],
       "title": "Accounts imported",
@@ -947,7 +924,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 14
       },
       "id": 8,
       "options": {
@@ -1004,6 +981,6 @@
   "timezone": "browser",
   "title": "Notification service overview",
   "uid": "edzzkkkyg6z9cc",
-  "version": 22,
+  "version": 25,
   "weekStart": ""
 }

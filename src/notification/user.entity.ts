@@ -1,8 +1,14 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Subscription } from './subscription.entity';
 import { Account } from './account.entity';
 
-@Entity({ name: 'user ' })
+@Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -22,7 +28,10 @@ export class User {
   @Column()
   photoUrl: string;
 
-  @ManyToOne(() => Subscription, (relatedSubscription) => relatedSubscription.users)
+  @ManyToOne(
+    () => Subscription,
+    (relatedSubscription) => relatedSubscription.users,
+  )
   subscription: Subscription;
 
   @OneToMany(() => Account, (relatedAccount) => relatedAccount.user, {
