@@ -44,6 +44,11 @@ services:
       - "5672:5672" # RabbitMQ for AMQP protocol
       - "15672:15672" #RabbitMQ Management UI
       - "15692:15692" #Prometheus Exporter
+    volumes:
+      # configure the RabbitMQ queue via the init-queue.sh script
+      - ./rabbit-mq-script-config/init-queue.sh:/docker-entrypoint-initdb.d/init-queue.sh
+    # Run the RabbitMQ server and the init-queue.sh script to have the default queue for notification service
+    command: [ '/bin/bash', '-c', 'rabbitmq-server & sleep 10 && /docker-entrypoint-initdb.d/init-queue.sh && tail -f /dev/null' ]
     networks:
       - notification-api-network
   # Service to run the mock server for testing the notification service with decaf API
@@ -73,7 +78,7 @@ services:
   # Service to run Grafana for monitoring the notification service
   grafana:
     image: grafana/grafana-enterprise
-    # if you are running as root then set it to 0
+    # if you are running as root set it to 0
     # else find the right id with the id -u command
     user: '0'
     environment:
