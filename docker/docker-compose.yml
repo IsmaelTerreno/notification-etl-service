@@ -1,7 +1,7 @@
 version: '3.7'
 services:
+  # Service to run the notification service for ETL process with decaf and stellar blockchain
   notification-etl-service:
-    # Service to run the notification service for ETL process with decaf and stellar blockchain
     image: notification-etl-service:latest
     env_file:
       - docker.env
@@ -32,8 +32,8 @@ services:
       - rabbitmq
     networks:
       - notification-api-network
+  # Service to run RabbitMQ and handle the message queue for notification service
   rabbitmq:
-    # Service to run RabbitMQ and handle the message queue for notification service
     image: rabbitmq:management
     container_name: rabbitmq
     hostname: rabbitmq
@@ -61,8 +61,8 @@ services:
       - ./config-mock-server:/config
     networks:
       - notification-api-network
+  # Service to run Prometheus for monitoring the notification service
   prometheus:
-    # Service to run Prometheus for monitoring the notification service
     image: prom/prometheus:latest
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
@@ -70,8 +70,8 @@ services:
       - "9090:9090"  # Prometheus UI
     networks:
       - notification-api-network
+  # Service to run Grafana for monitoring the notification service
   grafana:
-    # Service to run Grafana for monitoring the notification service
     image: grafana/grafana-enterprise
     # if you are running as root then set it to 0
     # else find the right id with the id -u command
@@ -89,8 +89,8 @@ services:
       - "3000:3000"  # Grafana UI
     networks:
       - notification-api-network
+  # Service to run the PostgresSQL database for the notification service
   postgres:
-    # Service to run the PostgresSQL database for the notification service
     image: postgres:latest
     restart: always
     environment:
@@ -103,6 +103,7 @@ services:
       - ./postgres-data:/var/lib/postgresql/data
     networks:
       - notification-api-network
+  # Service to run the PostgresSQL exporter for the prometheus monitoring service
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
     ports:
