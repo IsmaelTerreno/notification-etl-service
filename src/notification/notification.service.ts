@@ -119,7 +119,7 @@ export class NotificationService implements OnModuleInit {
     }
   }
 
-  //@Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async getTransactionsForPaymentsUpdates() {
     try {
       return this.stellarBlockchainService.getTransactions((responseStream) => {
@@ -187,7 +187,14 @@ export class NotificationService implements OnModuleInit {
   }
 
   findUsersToNotify(userAccounts: string[]): Promise<User[]> {
-    return this.userRepository.findBy({ id: In(userAccounts) });
+    // Find the users to notify by the user accounts
+    return this.userRepository.find({
+      where: {
+        accounts: {
+          publicKey: In(userAccounts),
+        },
+      },
+    });
   }
 
   parseStellarTransaction(streamedText: string) {
