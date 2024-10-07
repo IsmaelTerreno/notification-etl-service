@@ -46,6 +46,21 @@ services:
       - "15692:15692" #Prometheus Exporter
     networks:
       - notification-api-network
+  # Service to run the mock server for testing the notification service with decaf API
+  decaf-api-mockserver:
+    image: mockserver/mockserver:latest
+    ports:
+      - "1080:1080"
+    environment:
+      MOCKSERVER_PROPERTY_FILE: /config/mockserver.properties
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/spec.json
+      # Hot reload when the spec.json changes (useful for development)
+      MOCKSERVER_WATCH_INITIALIZATION_JSON: "true"
+    volumes:
+      # bind the config for easy editing
+      - ./config-mock-server:/config
+    networks:
+      - notification-api-network
   prometheus:
     # Service to run Prometheus for monitoring the notification service
     image: prom/prometheus:latest
@@ -69,7 +84,7 @@ services:
       # Grafana data storage
       - ./grafana-storage:/var/lib/grafana
       # Grafana configuration for dashboard import
-      - ./dashboard-monitoring-grafana:/etc/grafana/provisioning
+      # - ./dashboard-monitoring-grafana:/etc/grafana/provisioning
     ports:
       - "3000:3000"  # Grafana UI
     networks:

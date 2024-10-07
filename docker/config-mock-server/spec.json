@@ -1,0 +1,69 @@
+[
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/searchUserProfile"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": [
+        {
+          "id": "pIUlq7w5kicbSn1S70Vo7R7LzA13",
+          "username": "scottymrty",
+          "name": "scottymrty",
+          "email": "scott@decaf.so",
+          "photoUrl": "",
+          "accountInfos": [
+            {
+              "publicKey": "CBM7T1NBJUH7BQiADpvnNVXqdnT8FmK7quJUJaUTEEG8",
+              "chain": "solana",
+              "index": 0,
+              "isActivated": true,
+              "isPrivate": false
+            },
+            {
+              "publicKey": "GCTBOGVD4POOHNRCPZANGKWP2HKCIRVA6ISWTKXURJP4N5QCLZRYSAAM",
+              "chain": "stellar",
+              "index": 0,
+              "isActivated": true,
+              "isPrivate": false
+            },
+            {
+              "publicKey": "8Km5LnE4kAWTdYjTfv4t5jV3rFVuxYmAbkiezrjqs1vp",
+              "chain": "solana",
+              "index": 1,
+              "isActivated": true,
+              "isPrivate": false
+            },
+            {
+              "publicKey": "GBWNAGKADFY6H572CAJLWPRDH5DRNPSNMCVQEWYAAYVMH2K7TZVQCSFU",
+              "chain": "stellar",
+              "index": 1,
+              "isActivated": true,
+              "isPrivate": false
+            }
+          ],
+          "settings": {
+            "visibility": {
+              "email": true,
+              "name": true,
+              "profilePhoto": true
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/notifications/send"
+    },
+    "httpResponse": {
+      "statusCode": 201
+    }
+  }
+]
