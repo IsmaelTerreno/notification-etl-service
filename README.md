@@ -163,4 +163,8 @@ Planned Architecture:
 ![planned-architecture.png](planned-architecture.png)
 
 Navigate through the [following link to access the planned architecture](https://s.icepanel.io/uYg8sIP5nHttWN/9CSh) for
-the Stellar Notification microservice system. 
+the Stellar Notification microservice system.
+
+Database model used in the architecture:
+
+![notification-service-model-db.png](notification-service-model-db.png)
