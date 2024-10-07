@@ -8,6 +8,7 @@ import { UserRepository } from './user.repository';
 import { SubscriptionRepository } from './notification.repository';
 import { DatabaseModule } from '../database/database.module';
 import { DecafApiModule } from '../decaf-api/decaf-api.module';
+import { AccountRepository } from './account.repository';
 
 @Module({
   imports: [
@@ -18,6 +19,11 @@ import { DecafApiModule } from '../decaf-api/decaf-api.module';
     DecafApiModule,
   ],
   controllers: [NotificationController],
-  providers: [NotificationService, UserRepository, SubscriptionRepository],
+  providers: [
+    NotificationService,
+    UserRepository,
+    AccountRepository,
+    SubscriptionRepository,
+  ],
 })
 export class NotificationModule {}

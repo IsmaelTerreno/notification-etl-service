@@ -9,6 +9,9 @@ import { In, Repository } from 'typeorm';
 import { USER_REPOSITORY } from './user.repository';
 import { User } from './user.entity';
 import { DecafApiService } from '../decaf-api/decaf-api.service';
+import { Account } from './account.entity';
+import { ACCOUNT_REPOSITORY } from './account.repository';
+import { UsersInfoDecafDto } from '../decaf-api/users-info-decaf.dto';
 
 @Injectable()
 export class NotificationService implements OnModuleInit {
@@ -16,12 +19,14 @@ export class NotificationService implements OnModuleInit {
   private subscriptionPayments: Subscription;
 
   constructor(
-    private readonly stellarBlockchainService: StellarBlockchainService,
-    private readonly rabbitMQService: RabbitMQService,
-    @Inject(SUBSCRIPTION_REPOSITORY)
-    private subscriptionRepository: Repository<Subscription>,
     @Inject(USER_REPOSITORY)
     private userRepository: Repository<User>,
+    @Inject(ACCOUNT_REPOSITORY)
+    private accountRepository: Repository<Account>,
+    @Inject(SUBSCRIPTION_REPOSITORY)
+    private subscriptionRepository: Repository<Subscription>,
+    private readonly stellarBlockchainService: StellarBlockchainService,
+    private readonly rabbitMQService: RabbitMQService,
     private decafApiService: DecafApiService,
   ) {}
 
@@ -32,6 +37,7 @@ export class NotificationService implements OnModuleInit {
     });
     if (!this.subscriptionPayments) {
       // Register the default subscription for payments
+      // Note: This is a default subscription for payments and can be changed later
       const subscriptionPaymentsToRegister = new Subscription();
       subscriptionPaymentsToRegister.name = 'Payments';
       this.subscriptionPayments = await this.subscriptionRepository.save(
@@ -44,7 +50,7 @@ export class NotificationService implements OnModuleInit {
   async importUsersProcess() {
     const callbackFn = async (response) => {
       this.logger.log('🚚 Received users from Decaf API...');
-      const users = response.data;
+      const users: UsersInfoDecafDto[] = response.data;
       this.logger.log(`👥 Total users received: ${users.length}`);
       this.logger.log('🏁 End of users stream');
       await this.processUsers(users);
@@ -52,7 +58,7 @@ export class NotificationService implements OnModuleInit {
     this.decafApiService.importUsers(callbackFn);
   }
 
-  async processUsers(users: any) {
+  async processUsers(users: UsersInfoDecafDto[]) {
     const hasUsers = users && users.length > 0;
     // Check if there are users to import
     if (hasUsers) {
@@ -81,6 +87,27 @@ export class NotificationService implements OnModuleInit {
         // Assign the subscription for payments.
         // Note: This is a default subscription for payments and can be changed later
         userInfoToPersist.subscription = this.subscriptionPayments;
+        const accountInfoUpdated: Account[] = [];
+        // Collect the user accounts information to persist
+        for (const account of user.accountInfos) {
+          // Find the account in the database by publicKey
+          const accountExists = await this.accountRepository.findOne({
+            where: { publicKey: account.publicKey },
+          });
+          // Create a new account if it does not exist
+          const accountInfoToPersist = accountExists
+            ? accountExists
+            : new Account();
+          accountInfoToPersist.publicKey = account.publicKey;
+          accountInfoToPersist.chain = account.chain;
+          accountInfoToPersist.isActivated = account.isActivated;
+          accountInfoToPersist.isPrivate = account.isPrivate;
+          // Assign the account info to the user
+          accountInfoToPersist.user = userInfoToPersist;
+          accountInfoUpdated.push(accountInfoToPersist);
+        }
+        // Assign the account info to the user
+        userInfoToPersist.accounts = accountInfoUpdated;
         await this.userRepository.save(userInfoToPersist);
         this.logger.log(
           '🆗 User info imported to database with userId: ' +
@@ -116,7 +143,9 @@ export class NotificationService implements OnModuleInit {
             `📦 Total transaction received: ${transactionDetails.length}`,
           );
           this.logger.log('🏁 End of transaction info stream');
-          await this.processTransactionDetails(transactionDetails);
+          await this.processTransactionsForExistingUsersToNotify(
+            transactionDetails,
+          );
         });
       });
     } catch (error) {
@@ -127,11 +156,13 @@ export class NotificationService implements OnModuleInit {
     }
   }
 
-  async processTransactionDetails(transactionDetails: any) {
-    // Get the user ids from the transaction details
-    const userIds = transactionDetails.map((transaction) => transaction.id);
+  async processTransactionsForExistingUsersToNotify(transactionDetails: any) {
+    // Get the user accounts from the transaction details
+    const userAccounts = transactionDetails.map(
+      (transaction) => transaction.source_account,
+    );
     // Find the users to notify
-    const usersToNotify = await this.findUsersToNotify(userIds);
+    const usersToNotify = await this.findUsersToNotify(userAccounts);
     // Log the users to notify
     this.logger.log(
       `👥 Users to notify: ${usersToNotify.map((user) => user.id).join(', ')}`,
@@ -155,8 +186,8 @@ export class NotificationService implements OnModuleInit {
     }
   }
 
-  findUsersToNotify(userIds: string[]): Promise<User[]> {
-    return this.userRepository.findBy({ id: In(userIds) });
+  findUsersToNotify(userAccounts: string[]): Promise<User[]> {
+    return this.userRepository.findBy({ id: In(userAccounts) });
   }
 
   parseStellarTransaction(streamedText: string) {

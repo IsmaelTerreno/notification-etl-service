@@ -7,19 +7,16 @@ export class Account {
   id: string;
 
   @Column()
-  userId: string;
+  publicKey: string;
 
   @Column()
-  username: string;
+  chain: string;
 
   @Column()
-  name: string;
+  isActivated: boolean;
 
   @Column()
-  email: string;
-
-  @Column()
-  photoUrl: string;
+  isPrivate: boolean;
 
   @ManyToOne(() => User, (relatedUser) => relatedUser.accounts)
   user: User;
