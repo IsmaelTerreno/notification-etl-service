@@ -7,11 +7,17 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { UserRepository } from './user.repository';
 import { SubscriptionRepository } from './notification.repository';
 import { DatabaseModule } from '../database/database.module';
+import { DecafApiModule } from '../decaf-api/decaf-api.module';
 
 @Module({
-  imports: [RabbitMQModule, StellarBlockchainModule, ScheduleModule.forRoot(), DatabaseModule],
+  imports: [
+    RabbitMQModule,
+    StellarBlockchainModule,
+    ScheduleModule.forRoot(),
+    DatabaseModule,
+    DecafApiModule,
+  ],
   controllers: [NotificationController],
   providers: [NotificationService, UserRepository, SubscriptionRepository],
 })
-export class NotificationModule {
-}
+export class NotificationModule {}

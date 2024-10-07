@@ -8,6 +8,7 @@ import { Subscription } from './subscription.entity';
 import { In, Repository } from 'typeorm';
 import { USER_REPOSITORY } from './user.repository';
 import { User } from './user.entity';
+import { DecafApiService } from '../decaf-api/decaf-api.service';
 
 @Injectable()
 export class NotificationService implements OnModuleInit {
@@ -21,8 +22,8 @@ export class NotificationService implements OnModuleInit {
     private subscriptionRepository: Repository<Subscription>,
     @Inject(USER_REPOSITORY)
     private userRepository: Repository<User>,
-  ) {
-  }
+    private decafApiService: DecafApiService,
+  ) {}
 
   async onModuleInit() {
     // Find the default subscription for payments if it exists
@@ -33,11 +34,44 @@ export class NotificationService implements OnModuleInit {
       // Register the default subscription for payments
       const subscriptionPaymentsToRegister = new Subscription();
       subscriptionPaymentsToRegister.name = 'Payments';
-      this.subscriptionPayments = await this.subscriptionRepository.save(subscriptionPaymentsToRegister);
+      this.subscriptionPayments = await this.subscriptionRepository.save(
+        subscriptionPaymentsToRegister,
+      );
     }
   }
 
   @Cron(CronExpression.EVERY_5_SECONDS)
+  async importUsersProcess() {
+    const callbackFn = async (response) => {
+      this.logger.log('🚚 Received users from Decaf API...');
+      const users = response.data;
+      this.logger.log(`👥 Total users received: ${users.length}`);
+      this.logger.log('🏁 End of users stream');
+      await this.processUsers(users);
+    };
+    this.decafApiService.importUsers(callbackFn);
+  }
+
+  async processUsers(users: any) {
+    const hasUsers = users && users.length > 0;
+    if (hasUsers) {
+      const usersToImport: User[] = users.map((user) => {
+        const newUser = new User();
+        newUser.userId = user.id;
+        newUser.username = user.username;
+        newUser.name = user.name;
+        newUser.email = user.email;
+        newUser.photoUrl = user.photoUrl;
+        newUser.subscription = this.subscriptionPayments;
+        return newUser;
+      });
+      this.logger.log('🆕 importing users to database...');
+      await this.userRepository.save(usersToImport);
+      this.logger.log('🆗 users imported to database');
+    }
+  }
+
+  //@Cron(CronExpression.EVERY_10_SECONDS)
   async getTransactionsForPaymentsUpdates() {
     try {
       return this.stellarBlockchainService.getTransactions((responseStream) => {
@@ -55,7 +89,8 @@ export class NotificationService implements OnModuleInit {
         // Handle the end of the response stream
         transactionInfoStream.on('close', async () => {
           // Parse the transaction details to JSON to get the transaction info
-          const transactionDetails = this.parseStellarTransaction(transactionInfo);
+          const transactionDetails =
+            this.parseStellarTransaction(transactionInfo);
           this.logger.log(
             `📦 Total transaction received: ${transactionDetails.length}`,
           );
@@ -73,15 +108,12 @@ export class NotificationService implements OnModuleInit {
 
   async processTransactionDetails(transactionDetails: any) {
     // Get the user ids from the transaction details
-    const userIds = transactionDetails.map(
-      (transaction) => transaction.id,
-    );
+    const userIds = transactionDetails.map((transaction) => transaction.id);
     // Find the users to notify
     const usersToNotify = await this.findUsersToNotify(userIds);
     // Log the users to notify
     this.logger.log(
-      `👥 Users to notify: ${usersToNotify.map((user) => user.id).join(', ')
-      }`,
+      `👥 Users to notify: ${usersToNotify.map((user) => user.id).join(', ')}`,
     );
 
     // Loop through the transaction details
@@ -123,7 +155,6 @@ export class NotificationService implements OnModuleInit {
     );
   }
 
-
   async createMessageMQService(messageMqDto: MessageMqDto) {
     // Send the message to the RabbitMQ queue to delegate the async message processing by the consumers
     await this.rabbitMQService.sendToQueue(
@@ -131,5 +162,4 @@ export class NotificationService implements OnModuleInit {
       messageMqDto.messageDetail,
     );
   }
-
 }
