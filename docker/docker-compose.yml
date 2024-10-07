@@ -66,7 +66,10 @@ services:
       - GF_INSTALL_PLUGINS=grafana-clock-panel
     restart: unless-stopped
     volumes:
+      # Grafana data storage
       - ./grafana-storage:/var/lib/grafana
+      # Grafana configuration for dashboard import
+      - ./dashboard-monitoring-grafana:/etc/grafana/provisioning
     ports:
       - "3000:3000"  # Grafana UI
     networks:
