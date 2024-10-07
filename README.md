@@ -4,6 +4,19 @@ This project is a microservice that listens for Stellar transactions and imports
 transactions associated with their accounts.
 Also delegates the notification to
 the [Notification worker service](https://github.com/IsmaelTerreno/notification-worker-service) via RabbitMQ messages.
+
+## Planned Architecture:
+
+![planned-architecture.png](planned-architecture.png)
+
+Navigate through
+the [following public link to access the planned architecture](https://s.icepanel.io/uYg8sIP5nHttWN/9CSh) for
+the Stellar Notification microservice system.
+
+## Database model used in the architecture:
+
+![notification-service-model-db.png](notification-service-model-db.png)
+
 This implementation is based on the coding task mentioned down below.
 
 ## Coding Task: Create a Stellar Notification System for Decaf Wallet
@@ -165,14 +178,3 @@ welcome. Your code will actually be implemented if we love it!
 - Quality of documentation and comments
 - Test coverage and quality
 - Creativity on design and scalability/iterability on future ideas
-
-Planned Architecture:
-
-![planned-architecture.png](planned-architecture.png)
-
-Navigate through the [following link to access the planned architecture](https://s.icepanel.io/uYg8sIP5nHttWN/9CSh) for
-the Stellar Notification microservice system.
-
-Database model used in the architecture:
-
-![notification-service-model-db.png](notification-service-model-db.png)
