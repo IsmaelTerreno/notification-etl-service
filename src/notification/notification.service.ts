@@ -54,20 +54,41 @@ export class NotificationService implements OnModuleInit {
 
   async processUsers(users: any) {
     const hasUsers = users && users.length > 0;
+    // Check if there are users to import
     if (hasUsers) {
-      const usersToImport: User[] = users.map((user) => {
-        const newUser = new User();
-        newUser.userId = user.id;
-        newUser.username = user.username;
-        newUser.name = user.name;
-        newUser.email = user.email;
-        newUser.photoUrl = user.photoUrl;
-        newUser.subscription = this.subscriptionPayments;
-        return newUser;
-      });
-      this.logger.log('🆕 importing users to database...');
-      await this.userRepository.save(usersToImport);
-      this.logger.log('🆗 users imported to database');
+      for (const user of users) {
+        // Find the user in the database by userId
+        const userExists = await this.userRepository.findOne({
+          where: { userId: user.id },
+        });
+        // Log the user information to import for new or existing user
+        const infoToLog = userExists ? '🔄 Updating user' : '🆕 Creating user';
+        this.logger.log(
+          infoToLog +
+            ' with userId: ' +
+            user.id +
+            ' and username: ' +
+            user.username,
+        );
+        // Create a new user if it does not exist
+        const userInfoToPersist = userExists ? userExists : new User();
+        // Collect the user information to persist
+        userInfoToPersist.userId = user.id;
+        userInfoToPersist.username = user.username;
+        userInfoToPersist.name = user.name;
+        userInfoToPersist.email = user.email;
+        userInfoToPersist.photoUrl = user.photoUrl;
+        // Assign the subscription for payments.
+        // Note: This is a default subscription for payments and can be changed later
+        userInfoToPersist.subscription = this.subscriptionPayments;
+        await this.userRepository.save(userInfoToPersist);
+        this.logger.log(
+          '🆗 User info imported to database with userId: ' +
+            user.id +
+            ' and username: ' +
+            user.username,
+        );
+      }
     }
   }
 
