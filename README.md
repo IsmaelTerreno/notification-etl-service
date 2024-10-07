@@ -9,9 +9,11 @@ the [Notification worker service](https://github.com/IsmaelTerreno/notification-
 
 ![planned-architecture.png](planned-architecture.png)
 
-Navigate through
+PLEASE! Navigate through
 the [following public link to access the planned architecture](https://s.icepanel.io/uYg8sIP5nHttWN/9CSh) for
-the Stellar Notification microservice system.
+the Stellar Notification microservice system. Where you can see and interact with the architecture diagram, also there
+is a visual workflow to see the interaction on the bottom left you will see an "Import users from Decaf and transaction
+from Stellar to notify users" flow to see interaction animations.
 
 ## Database model used in the architecture:
 
