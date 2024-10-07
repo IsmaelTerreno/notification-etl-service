@@ -21,6 +21,42 @@ from Stellar to notify users" flow to see interaction animations.
 
 This implementation is based on the coding task mentioned down below.
 
+## How to run the project
+
+### Prerequisites
+
+- Docker
+
+### Requirements
+
+1. Run the following command to give permissions to the shell scripts:
+
+```bash
+chmod +x ./docker/rabbit-mq-script-config/init-queue.sh
+```
+
+2. Run the following command to start the project and dependencies with docker-compose:
+
+```bash
+docker-compose up
+```
+
+3. Wait a few seconds for the services to start, then you can access the following local services:
+
+- [RabbitMQ Management](http://localhost:15672)
+- [Notification ETL Service](http://localhost:3090)
+- [Grafana Monitoring dashboard](http://localhost:3000)
+- [Prometheus Monitoring](http://localhost:9090)
+- [Mock Search users - Decaf API](http://localhost:1080/searchUserProfile)
+- [Mock Notification send - Decaf API](http://localhost:1081/notifications/send)
+
+4. Run the related
+   microservice [Notification worker service](https://github.com/IsmaelTerreno/notification-worker-service) to work
+   together with the Notification ETL service.
+
+5. Go to the [Grafana Monitoring dashboard](http://localhost:3000) and import the dashboard from the file
+   `./grafana/dashboard.json` to see the monitoring of the services.
+
 ## Coding Task: Create a Stellar Notification System for Decaf Wallet
 
 Objective: Develop a microservice-based notification system that monitors Stellar transactions and notifies Decaf users
