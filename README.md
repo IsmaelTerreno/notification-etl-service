@@ -29,33 +29,43 @@ This implementation is based on the coding task mentioned down below.
 
 ### Requirements
 
-1. Run the following command to give permissions to the shell scripts:
+#### 1) Run the following command to give permissions to the shell scripts:
 
 ```bash
 chmod +x ./docker/rabbit-mq-script-config/init-queue.sh
 ```
 
-2. Run the following command to start the project and dependencies with docker-compose:
+#### 2) Run the following command to start the project and dependencies with docker-compose:
 
 ```bash
 docker-compose up
 ```
 
-3. Wait a few seconds for the services to start, then you can access the following local services:
+#### 3) Wait for approximately 10-20 seconds for the services to start, then you will be able to access the following local services:
+
+#### Microservice core services:
 
 - [RabbitMQ Management](http://localhost:15672)
 - [Notification ETL Service](http://localhost:3090)
-- [Grafana Monitoring dashboard](http://localhost:3000)
-- [Prometheus Monitoring](http://localhost:9090)
+
+#### Mock Decaf API services:
+
 - [Mock Search users - Decaf API](http://localhost:1080/searchUserProfile)
 - [Mock Notification send - Decaf API](http://localhost:1080/notifications/send)
 
-4. Go to
-   the [Notification service overview](http://localhost:3000/d/edzzkkkyg6z9cc/notification-service-overview?orgId=1) and
-   login with the following credentials.
-    - **User**: admin
-    - **Password**: admin123
-      Then you will see the following dashboard:
+#### Monitoring services:
+
+- [Grafana Monitoring dashboard](http://localhost:3000)
+- [Prometheus Monitoring](http://localhost:9090)
+
+#### 4. Go to the [Notification service overview](http://localhost:3000/d/edzzkkkyg6z9cc/notification-service-overview?orgId=1)
+
+#### Login with the following credentials.
+
+- **User**: admin
+- **Password**: admin123
+
+Then you will see the following dashboard:
 
 ![notification-dashboard-grafana.png](notification-dashboard-grafana.png)
 
