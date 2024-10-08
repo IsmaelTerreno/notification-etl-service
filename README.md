@@ -21,7 +21,7 @@ from Stellar to notify users" flow to see interaction animations.
 
 This implementation is based on the coding task mentioned down below.
 
-## How to run the project
+## How to run the project with Docker
 
 ### Prerequisites
 
