@@ -45,8 +45,9 @@ cd docker && docker-compose up -d
 
 #### Microservice core services:
 
-- [RabbitMQ Management](http://localhost:15672)
-- [Notification ETL Service](http://localhost:3090)
+- [RabbitMQ Management](http://localhost:15672). User: `notification_service_api_mq`, Password:
+  `notification_service_api_mq`
+- [Notification ETL Service](http://localhost:3090/health)
 
 #### Mock Decaf API services:
 
