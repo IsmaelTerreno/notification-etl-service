@@ -87,7 +87,7 @@ services:
     user: '0'
     environment:
       - GF_SERVER_ROOT_URL=http://my.grafana.server/
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,yesoreyeram-infinity-datasource,maormil-rabbitmq-datasource,prometheus
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,yesoreyeram-infinity-datasource,maormil-rabbitmq-datasource
     restart: unless-stopped
     volumes:
       # Grafana data storage
