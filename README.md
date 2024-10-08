@@ -54,12 +54,12 @@ docker-compose up
    microservice [Notification worker service](https://github.com/IsmaelTerreno/notification-worker-service) to work
    together with the Notification ETL service.
 
-5. Go to the [Grafana Monitoring dashboard](http://localhost:3000) and login with the following credentials.
+5. Go to
+   the [Notification service overview](http://localhost:3000/d/edzzkkkyg6z9cc/notification-service-overview?orgId=1) and
+   login with the following credentials.
     - **User**: admin
     - **Password**: admin123
-6. Go to
-   the [Notification service overview](http://localhost:3000/d/edzzkkkyg6z9cc/notification-service-overview?orgId=1) and
-   you will see the following dashboard:
+      Then you will see the following dashboard:
 
 ![notification-dashboard-grafana.png](notification-dashboard-grafana.png)
 
