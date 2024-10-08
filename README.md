@@ -48,7 +48,7 @@ docker-compose up
 - [Grafana Monitoring dashboard](http://localhost:3000)
 - [Prometheus Monitoring](http://localhost:9090)
 - [Mock Search users - Decaf API](http://localhost:1080/searchUserProfile)
-- [Mock Notification send - Decaf API](http://localhost:1081/notifications/send)
+- [Mock Notification send - Decaf API](http://localhost:1080/notifications/send)
 
 4. Run the related
    microservice [Notification worker service](https://github.com/IsmaelTerreno/notification-worker-service) to work
