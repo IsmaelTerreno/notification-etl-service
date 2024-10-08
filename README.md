@@ -35,7 +35,7 @@ This implementation is based on the coding task mentioned down below.
 chmod +x ./docker/rabbit-mq-script-config/init-queue.sh
 ```
 
-#### 2) Run the following command to start the project and dependencies with docker-compose:
+#### 2) Run the following command to start the project and download image dependencies with docker-compose:
 
 ```bash
 cd docker && docker-compose up -d
