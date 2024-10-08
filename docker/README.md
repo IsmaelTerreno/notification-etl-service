@@ -1,6 +1,6 @@
 # Some QA about this folder for quick consideration.
 
-#### Why is this db here and not in the "grafana-storage" folder?
+#### Why is this grafana.db in the "grafana-storage" folder?
 
 Just for demo purposes so take this account on the code review. So you can just simply run the docker-compose file and
 have a nice dashboard with some data.
