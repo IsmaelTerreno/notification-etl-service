@@ -38,7 +38,7 @@ chmod +x ./docker/rabbit-mq-script-config/init-queue.sh
 #### 2) Run the following command to start the project and dependencies with docker-compose:
 
 ```bash
-docker-compose up
+cd docker && docker-compose up -d
 ```
 
 #### 3) Wait for approximately 10-20 seconds for the services to start, then you will be able to access the following local services:
