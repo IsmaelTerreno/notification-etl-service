@@ -10,6 +10,10 @@ import { DatabaseModule } from '../database/database.module';
 import { DecafApiModule } from '../decaf-api/decaf-api.module';
 import { AccountRepository } from './account.repository';
 
+/**
+ * The module that contains all the notification related services and controllers as the heart for other modules.
+ * This module is responsible for persisting the notifications and subscriptions in the database and sending notifications to the users via rabbitMQ for message delegation.
+ */
 @Module({
   imports: [
     RabbitMQModule,
@@ -26,8 +30,4 @@ import { AccountRepository } from './account.repository';
     SubscriptionRepository,
   ],
 })
-/**
- * The module that contains all the notification related services and controllers as the heart for other modules.
- * This module is responsible for persisting the notifications and subscriptions in the database and sending notifications to the users via rabbitMQ for message delegation.
- */
 export class NotificationModule {}

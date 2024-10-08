@@ -11,6 +11,12 @@ export class DecafApiService {
 
   constructor(private readonly httpService: HttpService) {}
 
+  /**
+   * Fetches users from the Decaf API and processes the response using the provided callback function.
+   *
+   * @param {Function} callbackFn - A callback function to handle the response received from the API.
+   * @return {void} No return value.
+   */
   importUsers(callbackFn) {
     this.logger.log('🛰 Fetching users from Decaf API...');
     this.httpService
@@ -33,6 +39,13 @@ export class DecafApiService {
       });
   }
 
+  /**
+   * Sends a notification to the Decaf API.
+   *
+   * @param {Object} notification - The notification payload to be sent.
+   * @param {Function} callbackFn - The callback function to handle the API response.
+   * @return {void} This method does not return a value directly; any response or error is handled via the callback function and logging.
+   */
   sendNotification(notification, callbackFn) {
     this.logger.log('🛰 Sending notification to Decaf API...');
     this.httpService

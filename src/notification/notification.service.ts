@@ -30,6 +30,14 @@ export class NotificationService implements OnModuleInit {
     private decafApiService: DecafApiService,
   ) {}
 
+  /**
+   * Initializes the module by setting up the default subscription for payments.
+   *
+   * This method attempts to find an existing subscription named 'Payments'.
+   * If such a subscription does not exist, it registers a new one.
+   *
+   * @return {Promise<void>} A promise that resolves when the initialization process is complete.
+   */
   async onModuleInit() {
     // Find the default subscription for payments if it exists
     this.subscriptionPayments = await this.subscriptionRepository.findOne({
@@ -46,6 +54,13 @@ export class NotificationService implements OnModuleInit {
     }
   }
 
+  /**
+   * Periodically imports users from the Decaf API every 5 seconds.
+   * The imported users are processed using the `processUsers` method.
+   * Logs the number of users received and indicates the end of the user stream.
+   *
+   * @return {Promise<void>}
+   */
   @Cron(CronExpression.EVERY_5_SECONDS)
   async importUsersProcess() {
     const callbackFn = async (response) => {
@@ -58,6 +73,12 @@ export class NotificationService implements OnModuleInit {
     this.decafApiService.importUsers(callbackFn);
   }
 
+  /**
+   * Imports or updates a list of users and their associated accounts into the database.
+   *
+   * @param {UsersInfoDecafDto[]} users - The array of user information to be processed.
+   * @return {Promise<void>} A promise that resolves when the processing is complete.
+   */
   async processUsers(users: UsersInfoDecafDto[]) {
     const hasUsers = users && users.length > 0;
     // Check if there are users to import
@@ -119,6 +140,15 @@ export class NotificationService implements OnModuleInit {
     }
   }
 
+  /**
+   * Schedules a task to retrieve and process transactions from the Stellar blockchain every 10 seconds.
+   *
+   * This method utilizes the Stellar Blockchain Service to fetch transactions,
+   * processes the incoming data stream to parse transaction details,
+   * and calls an internal method to handle notification for existing users based on the transactions.
+   *
+   * @return {Promise<string | void>} A promise that resolves with an error message if the process fails, or void if successful.
+   */
   @Cron(CronExpression.EVERY_10_SECONDS)
   async getTransactionsForPaymentsUpdates() {
     try {
@@ -156,6 +186,12 @@ export class NotificationService implements OnModuleInit {
     }
   }
 
+  /**
+   * Processes transactions for existing users and sends necessary notifications.
+   *
+   * @param {Array} transactionDetails - An array containing transaction details.
+   * @return {Promise<void>} A promise that resolves when the processing is complete.
+   */
   async processTransactionsForExistingUsersToNotify(transactionDetails: any) {
     // Get the user accounts from the transaction details
     const userAccounts = transactionDetails.map(
@@ -186,6 +222,12 @@ export class NotificationService implements OnModuleInit {
     }
   }
 
+  /**
+   * Finds and returns a list of users that need to be notified based on given user accounts.
+   *
+   * @param {string[]} userAccounts - Array of user account public keys to find the users to notify.
+   * @return {Promise<User[]>} A promise that resolves to an array of User objects to be notified.
+   */
   findUsersToNotify(userAccounts: string[]): Promise<User[]> {
     // Find the users to notify by the user accounts
     return this.userRepository.find({
@@ -197,6 +239,12 @@ export class NotificationService implements OnModuleInit {
     });
   }
 
+  /**
+   * Parses a streamed Stellar transaction text and extracts transaction details.
+   *
+   * @param {string} streamedText - The streamed text containing raw transaction data.
+   * @return {Array<Object>} - An array of parsed transaction detail objects.
+   */
   parseStellarTransaction(streamedText: string) {
     // Prefix to identify the transaction details
     const DATA_PREFIX_FILTER = 'data: {';
@@ -214,6 +262,12 @@ export class NotificationService implements OnModuleInit {
     );
   }
 
+  /**
+   * Sends a message to the RabbitMQ queue for asynchronous processing by consumers.
+   *
+   * @param {MessageMqDto} messageMqDto - The data transfer object containing the queue name and message details.
+   * @return {Promise<void>} A promise that resolves when the message has been successfully sent to the queue.
+   */
   async createMessageMQService(messageMqDto: MessageMqDto) {
     // Send the message to the RabbitMQ queue to delegate the async message processing by the consumers
     await this.rabbitMQService.sendToQueue(

@@ -1,6 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
+/**
+ * Represents an Account Information Data Transfer Object for Decaf API.
+ *
+ * Contains essential account information including id, public key, chain,
+ * activation status, and privacy status.
+ *
+ * The fields are decorated with validation and ApiProperty decorators.
+ */
 export class AccountInfoDecafDto {
   @ApiProperty({
     description: 'Account id from decaf api.',

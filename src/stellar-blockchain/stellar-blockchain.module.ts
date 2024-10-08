@@ -2,6 +2,10 @@ import { Module } from '@nestjs/common';
 import { StellarBlockchainService } from './stellar-blockchain.service';
 import { HttpModule } from '@nestjs/axios';
 
+/**
+ * The module that contains all the stellar blockchain related services.
+ * This module is responsible for sending requests to the stellar blockchain server.
+ */
 @Module({
   imports: [
     HttpModule.register({
@@ -12,8 +16,4 @@ import { HttpModule } from '@nestjs/axios';
   providers: [StellarBlockchainService],
   exports: [StellarBlockchainService],
 })
-/**
- * The module that contains all the stellar blockchain related services.
- * This module is responsible for sending requests to the stellar blockchain server.
- */
 export class StellarBlockchainModule {}
