@@ -58,6 +58,12 @@ docker-compose up
 - [Grafana Monitoring dashboard](http://localhost:3000)
 - [Prometheus Monitoring](http://localhost:9090)
 
+You can check the container status with the following command, in the meantime, the services are starting:
+
+```bash
+docker ps
+```
+
 #### 4. Go to the [Notification service overview](http://localhost:3000/d/edzzkkkyg6z9cc/notification-service-overview?orgId=1)
 
 #### Login with the following credentials.
