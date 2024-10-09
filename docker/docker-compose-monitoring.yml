@@ -1,38 +1,5 @@
 version: '3.7'
 services:
-  # Service to run the notification service for ETL process with decaf and stellar blockchain
-  notification-etl-service:
-    image: notification-etl-service:latest
-    container_name: notification-etl-service
-    env_file:
-      - docker.env
-    build:
-      context: ../
-      dockerfile: ./docker/Dockerfile
-      args:
-        # Environment variables for the notification ETL service
-        SERVER_PORT_LISTENING: ${SERVER_PORT_LISTENING}
-        NODE_ENV: ${NODE_ENV}
-        CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN}
-        HOST_DB_CONFIG: ${HOST_DB_CONFIG}
-        PORT_DB_CONFIG: ${PORT_DB_CONFIG}
-        DIALECT_DB_CONFIG: ${DIALECT_DB_CONFIG}
-        PROTOCOL_DB_CONFIG: ${PROTOCOL_DB_CONFIG}
-        DATABASE_NAME_DB_CONFIG: ${DATABASE_NAME_DB_CONFIG}
-        LOG_DEBUG_DB_CONFIG: ${LOG_DEBUG_DB_CONFIG}
-        USER_NAME_DB_CONFIG: ${USER_NAME_DB_CONFIG}
-        USER_PASSWORD_DB_CONFIG: ${USER_PASSWORD_DB_CONFIG}
-    restart: always
-    ports:
-      - '3090:3090' # Port to access the notification service API
-    volumes:
-      - ./notification-etl-service-data:/notification-etl-service
-    depends_on:
-      # Declare dependencies for startup
-      - postgres
-      - rabbitmq
-    networks:
-      - notification-api-network
   # Service to run RabbitMQ and handle the message queue for notification service
   rabbitmq:
     image: rabbitmq:management
@@ -50,22 +17,6 @@ services:
       - ./rabbit-mq-script-config/init-queue.sh:/docker-entrypoint-initdb.d/init-queue.sh
     # Run the RabbitMQ server and the init-queue.sh script to have the default queue for notification service
     command: [ '/bin/bash', '-c', 'rabbitmq-server & sleep 10 && /docker-entrypoint-initdb.d/init-queue.sh && tail -f /dev/null' ]
-    networks:
-      - notification-api-network
-  # Service to run the mock server for testing the notification service with decaf API
-  decaf-api-mockserver:
-    image: mockserver/mockserver:latest
-    container_name: decaf-api-mockserver
-    ports:
-      - "1080:1080"
-    environment:
-      MOCKSERVER_PROPERTY_FILE: /config/mockserver.properties
-      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/spec.json
-      # Hot reload when the spec.json changes (useful for development)
-      MOCKSERVER_WATCH_INITIALIZATION_JSON: "true"
-    volumes:
-      # bind the config for easy editing
-      - ./config-mock-server:/config
     networks:
       - notification-api-network
   # Service to run Prometheus for monitoring the notification service
@@ -98,21 +49,6 @@ services:
       - "3000:3000"  # Grafana UI
     networks:
       - notification-api-network
-  # Service to run the PostgresSQL database for the notification service
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=notification-service
-    ports:
-      - '5432:5432'
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
-    networks:
-      - notification-api-network
   # Service to run the PostgresSQL exporter for the prometheus monitoring service
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
@@ -122,11 +58,7 @@ services:
     environment:
       DATA_SOURCE_NAME: "postgresql://postgres:postgres@postgres:5432/notification-service?sslmode=disable"
     links:
-      - postgres
       - prometheus
-    depends_on:
-      # Declare dependencies for startup
-      - postgres
     networks:
       - notification-api-network
 networks:
