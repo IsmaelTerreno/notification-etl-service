@@ -1,24 +1,5 @@
 version: '3.7'
 services:
-  # Service to run RabbitMQ and handle the message queue for notification service
-  rabbitmq:
-    image: rabbitmq:management
-    container_name: rabbitmq
-    hostname: rabbitmq
-    environment:
-      - RABBITMQ_DEFAULT_USER=notification_service_api_mq
-      - RABBITMQ_DEFAULT_PASS=notification_service_api_mq
-    ports:
-      - "5672:5672" # RabbitMQ for AMQP protocol
-      - "15672:15672" #RabbitMQ Management UI
-      - "15692:15692" #Prometheus Exporter
-    volumes:
-      # configure the RabbitMQ queue via the init-queue.sh script
-      - ./rabbit-mq-script-config/init-queue.sh:/docker-entrypoint-initdb.d/init-queue.sh
-    # Run the RabbitMQ server and the init-queue.sh script to have the default queue for notification service
-    command: [ '/bin/bash', '-c', 'rabbitmq-server & sleep 10 && /docker-entrypoint-initdb.d/init-queue.sh && tail -f /dev/null' ]
-    networks:
-      - notification-api-network
   # Service to run Prometheus for monitoring the notification service
   prometheus:
     image: prom/prometheus:latest
