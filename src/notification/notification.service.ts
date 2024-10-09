@@ -221,8 +221,12 @@ export class NotificationService implements OnModuleInit {
           body: 'You have received a new transaction',
           data: {
             source_account: transactionX.source_account,
+            fee_account: transactionX.fee_account,
             hash: transactionX.hash,
             created_at: transactionX.created_at,
+            successful: transactionX.successful,
+            transaction_stellar_explorer_link_preview:
+              'https://testnet.steexp.com/tx/' + transactionX.hash,
           },
         },
       };
