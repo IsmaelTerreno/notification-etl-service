@@ -9,7 +9,7 @@ the [Notification worker service](https://github.com/IsmaelTerreno/notification-
 
 - [Part 1 - Microservice Design Explanation 🎥 ](https://www.loom.com/share/2cc4d31f67934be1bd0268d18885249d?sid=7890692c-2001-4642-afa3-4dc6f732aab1)
 - [Part 2 - How to run the Microservices with Docker 🎥 ](https://www.loom.com/share/b183445ec0284a9d9fa30c0416eb8597?sid=c7070bf8-30ba-4230-87d1-2212e4c97769)
-- [Part 3 - How to test the Microservices and use the monitoring tools 🎥 ](https://www.loom.com/share/2cc4d31f67934be1bd0268d18885249d?sid=7890692c-2001-4642-afa3-4dc6f732aab1)
+- [Part 3 - How to test the Microservices and use the monitoring tools 🎥 ](https://www.loom.com/share/c935b9150c10404b909e42e7676c4787?sid=469becdb-f77d-43aa-8fb8-f27fea07d849)
 
 
 ## Planned Architecture:
