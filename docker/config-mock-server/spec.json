@@ -53,6 +53,43 @@
               "profilePhoto": true
             }
           }
+        },
+        {
+          "id": "pIUlq7w5kicbSn1S70Vo7R7LzA13",
+          "username": "ismaelterr",
+          "name": "ismaelterr",
+          "email": "ismael@decaf.so",
+          "photoUrl": "",
+          "accountInfos": [
+            {
+              "publicKey": "GCF4ZOCRRGT365MTI2LI6ZP4425RMSABLXLOUZJ6TY6SBUABOQKG4EJI",
+              "chain": "stellar",
+              "index": 1,
+              "isActivated": true,
+              "isPrivate": false
+            },
+            {
+              "publicKey": "GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR",
+              "chain": "stellar",
+              "index": 1,
+              "isActivated": true,
+              "isPrivate": false
+            },
+            {
+              "publicKey": "GCKRSF24BTCW6UZOJMW7DCMRLAZIY77HCBION3QCBRBGUX7QE2IBN6AS",
+              "chain": "stellar",
+              "index": 1,
+              "isActivated": true,
+              "isPrivate": false
+            }
+          ],
+          "settings": {
+            "visibility": {
+              "email": true,
+              "name": true,
+              "profilePhoto": true
+            }
+          }
         }
       ]
     }

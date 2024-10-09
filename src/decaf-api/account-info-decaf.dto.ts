@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 /**
  * Represents an Account Information Data Transfer Object for Decaf API.
@@ -21,6 +21,12 @@ export class AccountInfoDecafDto {
   })
   @IsString()
   publicKey: string;
+
+  @ApiProperty({
+    description: 'Index number.',
+  })
+  @IsNumber()
+  index: number;
 
   @ApiProperty({
     description: 'Account chain.',

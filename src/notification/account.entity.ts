@@ -16,6 +16,9 @@ export class Account {
   publicKey: string;
 
   @Column()
+  index: number;
+
+  @Column()
   chain: string;
 
   @Column()

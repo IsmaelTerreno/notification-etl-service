@@ -12,6 +12,7 @@ import { DecafApiService } from '../decaf-api/decaf-api.service';
 import { Account } from './account.entity';
 import { ACCOUNT_REPOSITORY } from './account.repository';
 import { UsersInfoDecafDto } from '../decaf-api/users-info-decaf.dto';
+import { EventNotificationMessageDto } from './event-notification-message.dto';
 
 @Injectable()
 export class NotificationService implements OnModuleInit {
@@ -120,6 +121,7 @@ export class NotificationService implements OnModuleInit {
             ? accountExists
             : new Account();
           accountInfoToPersist.publicKey = account.publicKey;
+          accountInfoToPersist.index = account.index;
           accountInfoToPersist.chain = account.chain;
           accountInfoToPersist.isActivated = account.isActivated;
           accountInfoToPersist.isPrivate = account.isPrivate;
@@ -199,24 +201,37 @@ export class NotificationService implements OnModuleInit {
     );
     // Find the users to notify
     const usersToNotify = await this.findUsersToNotify(userAccounts);
+    // Check if there are users to notify
+    if (!usersToNotify || usersToNotify.length === 0) {
+      this.logger.log('🚫 No users found to notify');
+      return;
+    }
     // Log the users to notify
     this.logger.log(
       `👥 Users to notify: ${usersToNotify.map((user) => user.id).join(', ')}`,
     );
-
     // Loop through the transaction details
     for (const transactionX of transactionDetails) {
+      // Event message to send to the RabbitMQ queue
+      const eventMessage: EventNotificationMessageDto = {
+        userIds: usersToNotify.map((user) => user.userId),
+        notification: {
+          title: 'Transaction Notification',
+          body: 'You have received a new transaction',
+          data: {
+            source_account: transactionX.source_account,
+            hash: transactionX.hash,
+            created_at: transactionX.created_at,
+          },
+        },
+      };
       this.logger.log('🚀 Sending transaction details to RabbitMQ...');
       // Send the transaction details to the RabbitMQ queue to delegate the async message processing
       await this.createMessageMQService({
         queueName: 'notification-service',
         messageDetail: {
           pattern: 'notification-to-send',
-          data: {
-            source_account: transactionX.source_account,
-            hash: transactionX.hash,
-            created_at: transactionX.created_at,
-          },
+          data: eventMessage,
         },
       });
     }
