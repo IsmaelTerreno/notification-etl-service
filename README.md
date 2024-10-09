@@ -35,10 +35,17 @@ This implementation is based on the coding task mentioned down below.
 chmod +x ./docker/rabbit-mq-script-config/init-queue.sh
 ```
 
-#### 2) Run the following command to start the project and download image dependencies with docker-compose:
+#### 2) Run the following two commands to start the project and download image dependencies with docker-compose:
+
+To start the microservice Docker services, run the following command:
 
 ```bash
-cd docker && docker-compose up -d
+cd docker && docker-compose -f docker-compose-microservice.yml up -d
+```
+To start the monitoring Docker services, run the following command:
+
+```bash
+cd docker && docker-compose -f docker-compose-monitoring.yml up -d
 ```
 
 #### 3) Wait for approximately 10-20 seconds for the services to start, then you will be able to access the following local services:
