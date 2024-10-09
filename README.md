@@ -5,6 +5,13 @@ transactions associated with their accounts.
 Also delegates the notification to
 the [Notification worker service](https://github.com/IsmaelTerreno/notification-worker-service) via RabbitMQ messages.
 
+# Tutorial videos for the project:
+
+- [Part 1 - Microservice Design Explanation 🎥 ](https://www.loom.com/share/2cc4d31f67934be1bd0268d18885249d?sid=7890692c-2001-4642-afa3-4dc6f732aab1)
+- [Part 2 - How to run the Microservices with Docker 🎥 ](https://www.loom.com/share/2cc4d31f67934be1bd0268d18885249d?sid=7890692c-2001-4642-afa3-4dc6f732aab1)
+- [Part 3 - How to test the Microservices and use the monitoring tools 🎥 ](https://www.loom.com/share/2cc4d31f67934be1bd0268d18885249d?sid=7890692c-2001-4642-afa3-4dc6f732aab1)
+
+
 ## Planned Architecture:
 
 ![planned-architecture.png](planned-architecture.png)
