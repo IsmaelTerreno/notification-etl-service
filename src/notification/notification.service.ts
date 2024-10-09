@@ -13,6 +13,7 @@ import { Account } from './account.entity';
 import { ACCOUNT_REPOSITORY } from './account.repository';
 import { UsersInfoDecafDto } from '../decaf-api/users-info-decaf.dto';
 import { EventNotificationMessageDto } from './event-notification-message.dto';
+import * as process from 'node:process';
 
 @Injectable()
 export class NotificationService implements OnModuleInit {
@@ -228,7 +229,7 @@ export class NotificationService implements OnModuleInit {
       this.logger.log('🚀 Sending transaction details to RabbitMQ...');
       // Send the transaction details to the RabbitMQ queue to delegate the async message processing
       await this.createMessageMQService({
-        queueName: 'notification-service',
+        queueName: process.env.RABBITMQ_QUEUE_NAME,
         messageDetail: {
           pattern: 'notification-to-send',
           data: eventMessage,
